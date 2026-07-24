@@ -1,0 +1,326 @@
+:root {
+    --primary: #0f2b48;
+    --accent: #c5a059;
+    --bg: #f4f6f9;
+    --text: #1a202c;
+}
+
+* {
+    box-sizing: border-box;
+    font-family: 'Tajawal', sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+}
+
+header {
+    background: var(--primary);
+    color: white;
+    padding: 12px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 3px solid var(--accent);
+}
+
+.header-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.flag-icon {
+    width: 22px;
+    height: auto;
+}
+
+.header-info {
+    font-size: 11px;
+    line-height: 1.4;
+}
+
+.developer-tag {
+    font-size: 11px;
+    background: rgba(255,255,255,0.1);
+    padding: 4px 8px;
+    border-radius: 4px;
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    font-weight: bold;
+}
+
+.auth-container {
+    max-width: 450px;
+    width: 90%;
+    margin: 40px auto;
+    background: white;
+    padding: 30px;
+    border-radius: 16px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+    border-top: 5px solid var(--primary);
+}
+
+.auth-header {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.auth-header h2 {
+    color: var(--primary);
+    font-size: 22px;
+}
+
+.auth-header p {
+    font-size: 12px;
+    color: #718096;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 12px;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #4a5568;
+}
+
+.form-group input, textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #cbd5e0;
+    border-radius: 8px;
+    font-size: 13px;
+    outline: none;
+}
+
+.input-space {
+    margin-bottom: 10px;
+}
+
+.btn-submit {
+    width: 100%;
+    background: var(--primary);
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.btn-otp {
+    padding: 0 12px;
+    font-size: 11px;
+    background: #e2e8f0;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.switch-auth {
+    text-align: center;
+    margin-top: 15px;
+    font-size: 12px;
+}
+
+.switch-auth a {
+    color: var(--primary);
+    font-weight: bold;
+    text-decoration: none;
+}
+
+/* لوحة التحكم */
+.main-dashboard {
+    padding: 20px;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.welcome-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.btn-logout {
+    background: #e53e3e;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+.card {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    border-top: 4px solid var(--accent);
+}
+
+.card h3 {
+    font-size: 16px;
+    margin-bottom: 15px;
+    color: var(--primary);
+}
+
+.task-item {
+    background: #f7fafc;
+    padding: 10px;
+    border-radius: 6px;
+    margin-top: 10px;
+    font-size: 12px;
+    border-right: 4px solid #48bb78;
+}
+
+.task-item.urgent {
+    border-right-color: #f56565;
+}
+
+.result-box {
+    margin-top: 10px;
+    font-size: 13px;
+    font-weight: bold;
+    color: var(--primary);
+}
+
+/* المساعد الذكي */
+.ai-widget {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    z-index: 999;
+}
+
+.ai-toggle {
+    background: var(--primary);
+    color: white;
+    border: 2px solid var(--accent);
+    padding: 10px 18px;
+    border-radius: 30px;
+    cursor: pointer;
+    font-weight: bold;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+.chat-box {
+    display: none;
+    position: absolute;
+    bottom: 50px;
+    left: 0;
+    width: 300px;
+    height: 380px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.chat-header {
+    background: var(--primary);
+    color: white;
+    padding: 10px;
+    font-size: 13px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.chat-messages {
+    flex: 1;
+    padding: 10px;
+    overflow-y: auto;
+    font-size: 12px;
+}
+
+.bot-msg {
+    background: #edf2f7;
+    padding: 8px;
+    border-radius: 8px;
+    margin-bottom: 8px;
+}
+
+.user-msg {
+    background: var(--primary);
+    color: white;
+    padding: 8px;
+    border-radius: 8px;
+    margin-bottom: 8px;
+    text-align: left;
+}
+
+.chat-input-area {
+    display: flex;
+    padding: 8px;
+    border-top: 1px solid #e2e8f0;
+}
+
+.chat-input-area input {
+    flex: 1;
+    padding: 6px;
+    border: 1px solid #cbd5e0;
+    border-radius: 4px;
+    font-size: 12px;
+}
+
+.chat-input-area button {
+    background: var(--accent);
+    color: white;
+    border: none;
+    padding: 6px 10px;
+    margin-right: 5px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+/* الشرح */
+.guide-modal {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.7);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+}
+
+.guide-content {
+    background: white;
+    width: 90%;
+    max-width: 450px;
+    border-radius: 16px;
+    padding: 25px;
+    text-align: center;
+}
+
+.guide-step { display: none; }
+.guide-step.active { display: block; }
+.guide-icon { font-size: 40px; margin-bottom: 10px; }
+.guide-btn {
+    background: var(--accent);
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    margin-top: 15px;
+}
