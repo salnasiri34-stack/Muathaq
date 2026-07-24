@@ -4,193 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>منصة مُوثّق الأكاديمية</title>
-    <!-- خط تجوال الرسمي -->
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --primary: #0f2b48; /* كحلي ملكي */
-            --accent: #c5a059;  /* ذهبي حكومي */
-            --bg: #f4f6f9;
-            --text: #1a202c;
-        }
-
-        * {
-            box-sizing: border-box;
-            font-family: 'Tajawal', sans-serif;
-            margin: 0;
-            padding: 0;
-        }
-
-        body {
-            background-color: var(--bg);
-            color: var(--text);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-
-        /* 👑 الشريط العلوي الرسمي */
-        header {
-            background: var(--primary);
-            color: white;
-            padding: 12px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 3px solid var(--accent);
-        }
-
-        .header-brand {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .flag-icon {
-            width: 22px;
-            height: auto;
-            border-radius: 2px;
-        }
-
-        .header-info {
-            font-size: 11px;
-            opacity: 0.9;
-            line-height: 1.4;
-        }
-
-        .developer-tag {
-            font-size: 11px;
-            background: rgba(255,255,255,0.1);
-            padding: 4px 8px;
-            border-radius: 4px;
-            border: 1px solid var(--accent);
-            color: var(--accent);
-            font-weight: bold;
-        }
-
-        /* 🔒 صندوق الدخول والتسجيل */
-        .auth-container {
-            max-width: 450px;
-            width: 90%;
-            margin: 40px auto;
-            background: white;
-            padding: 30px;
-            border-radius: 16px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
-            border-top: 5px solid var(--primary);
-        }
-
-        .auth-header {
-            text-align: center;
-            margin-bottom: 25px;
-        }
-
-        .auth-header h2 {
-            color: var(--primary);
-            font-size: 24px;
-            margin-bottom: 5px;
-        }
-
-        .form-group {
-            margin-bottom: 18px;
-        }
-
-        .form-group label {
-            display: block;
-            font-size: 13px;
-            font-weight: bold;
-            margin-bottom: 6px;
-            color: #4a5568;
-        }
-
-        .form-group input {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #cbd5e0;
-            border-radius: 8px;
-            font-size: 14px;
-            outline: none;
-            transition: 0.3s;
-        }
-
-        .form-group input:focus {
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(15, 43, 72, 0.1);
-        }
-
-        .btn-submit {
-            width: 100%;
-            background: var(--primary);
-            color: white;
-            border: none;
-            padding: 14px;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-
-        .btn-submit:hover {
-            background: #163d66;
-        }
-
-        /* 🎓 شاشة الشرح للتطبيق (تظهر أول مرة فقط) */
-        .guide-modal {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0,0,0,0.7);
-            z-index: 1000;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .guide-content {
-            background: white;
-            width: 90%;
-            max-width: 500px;
-            border-radius: 16px;
-            padding: 25px;
-            text-align: center;
-            animation: fadeIn 0.4s ease;
-        }
-
-        .guide-step { display: none; }
-        .guide-step.active { display: block; }
-
-        .guide-icon {
-            font-size: 50px;
-            margin-bottom: 15px;
-        }
-
-        .guide-btn {
-            background: var(--accent);
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: bold;
-            margin-top: 20px;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
     <!-- 👑 الهيدر الرسمي -->
     <header>
         <div class="header-brand">
-            <!-- علم المملكة العربية السعودية -->
             <img src="https://flagcdn.com/w40/sa.png" class="flag-icon" alt="علم السعودية">
             <div class="header-info">
                 <strong>منصة مُوثّق الأكاديمية</strong><br>
-                <span>تاريخ التدشين: 2026م | رؤية المملكة 2030 🇸🇦</span>
+                <span>تدشين 2026م | رؤية المملكة 2030 🇸🇦</span>
             </div>
         </div>
         <div class="developer-tag">
@@ -200,148 +25,145 @@
 
     <!-- 🔒 شاشة تسجيل الدخول / إنشاء الحساب -->
     <div class="auth-container" id="authBox">
-        <!-- سيناريو الدخول بكلمة المرور فقط (نمط البنوك) -->
+        <!-- تسجيل الدخول بنمط البنوك -->
         <div id="loginSection">
             <div class="auth-header">
                 <h2>مرحباً بك مجدداً 🏛️</h2>
-                <p style="font-size: 12px; color: #718096;">أدخل كلمة المرور الخاصة بحسابك للدخول السريع</p>
+                <p>أدخل كلمة المرور الخاصة بحسابك للدخول السريع</p>
             </div>
             <div class="form-group">
                 <label>كلمة المرور الحماية</label>
                 <input type="password" id="loginPass" placeholder="••••••••">
             </div>
             <button class="btn-submit" onclick="loginUser()">تسجيل الدخول</button>
-            <p style="text-align: center; margin-top: 15px; font-size: 12px;">
-                ليس لديك حساب؟ <a href="#" onclick="showRegister()" style="color: var(--primary); font-weight: bold;">إنشاء حساب جديد</a>
+            <p class="switch-auth">
+                ليس لديك حساب؟ <a href="#" onclick="showRegister()">إنشاء حساب جديد</a>
             </p>
         </div>
 
-        <!-- سيناريو التسجيل لأول مرة -->
+        <!-- إنشاء حساب جديد -->
         <div id="registerSection" style="display: none;">
             <div class="auth-header">
                 <h2>إنشاء حساب أكاديمي</h2>
-                <p style="font-size: 12px; color: #718096;">سجل بياناتك للتفعيل لأول مرة</p>
+                <p>سجل بياناتك للتفعيل لأول مرة</p>
             </div>
             <div class="form-group">
                 <label>الاسم الثلاثي</label>
                 <input type="text" id="regName" placeholder="سليمان الناصري">
             </div>
             <div class="form-group">
-                <label>البريد الإلكتروني الجامعي/الشخصي</label>
+                <label>البريد الإلكتروني</label>
                 <input type="email" id="regEmail" placeholder="example@domain.com">
             </div>
             <div class="form-group">
                 <label>رمز التحقق (OTP)</label>
                 <div style="display: flex; gap: 5px;">
-                    <input type="text" id="otpCode" placeholder="أدخل الرمز المكون من 4 أرقام">
-                    <button type="button" style="padding: 0 10px; font-size: 11px; background: #e2e8f0; border: none; border-radius: 6px; cursor: pointer;" onclick="sendOTP()">إرسال الرمز</button>
+                    <input type="text" id="otpCode" placeholder="رمز التحقق">
+                    <button type="button" class="btn-otp" onclick="sendOTP()">إرسال الرمز</button>
                 </div>
             </div>
             <div class="form-group">
-                <label>تعيين كلمة المرور (للدخول السريع لاحقاً)</label>
+                <label>تعيين كلمة المرور</label>
                 <input type="password" id="regPass" placeholder="••••••••">
             </div>
             <button class="btn-submit" onclick="registerUser()">تأكيد وإنشاء الحساب</button>
         </div>
     </div>
 
-    <!-- 🎓 شاشة الشرح والجولة التعريفية (تظهر أول مرة فقط) -->
+    <!-- 🏛️ لوحة التحكم الرئيسية (تظهر بعد الدخول) -->
+    <main class="main-dashboard" id="mainDashboard" style="display: none;">
+        <div class="welcome-bar">
+            <h3>أهلاً بك، <span id="userNameDisplay">الطالب</span> 👋</h3>
+            <button class="btn-logout" onclick="logout()">تسجيل الخروج</button>
+        </div>
+
+        <!-- الأقسام الرئيسية -->
+        <div class="grid-container">
+            <!-- 1. إدارة الواجبات -->
+            <div class="card">
+                <h3>⏱️ إضافة واجب جديد</h3>
+                <div class="form-group">
+                    <input type="text" id="taskName" placeholder="اسم المادة/التكليف">
+                </div>
+                <div class="form-group">
+                    <label>تاريخ التسليم النهائي</label>
+                    <input type="datetime-local" id="taskDueDate">
+                </div>
+                <button class="btn-submit" onclick="addTask()">حفظ ونشر التنبيه</button>
+                <div class="task-list" id="taskList"></div>
+            </div>
+
+            <!-- 2. حاسبة المعدل -->
+            <div class="card">
+                <h3>🎓 حاسبة المعدل التراكمي (GPA)</h3>
+                <div class="form-group">
+                    <input type="number" id="currentGpa" step="0.01" placeholder="معدلك الحالي (مثال: 4.2)">
+                </div>
+                <div class="form-group">
+                    <input type="number" id="targetGpa" step="0.01" placeholder="المعدل المستهدف للتخرج">
+                </div>
+                <button class="btn-submit" onclick="calculateGPA()">تحليل الهدف الأكاديمي</button>
+                <div id="gpaResult" class="result-box"></div>
+            </div>
+
+            <!-- 3. الملاحظات والملخصات -->
+            <div class="card">
+                <h3>📝 دفتر الملاحظات السريعة</h3>
+                <textarea id="noteContent" rows="4" placeholder="اكتب ملاحظات المحاضرة هنا..."></textarea>
+                <button class="btn-submit" style="margin-top: 10px;" onclick="saveNote()">حفظ الملاحظة</button>
+                <div id="savedNotes" class="notes-container"></div>
+            </div>
+
+            <!-- 4. مولّد غلاف الأبحاث -->
+            <div class="card">
+                <h3>📄 مولّد غلاف الأبحاث الرسمي</h3>
+                <input type="text" id="docDoctor" placeholder="اسم الدكتور" class="input-space">
+                <input type="text" id="docSubject" placeholder="اسم المادة" class="input-space">
+                <button class="btn-submit" onclick="generateCover()">طباعة / تحميل الغلاف</button>
+            </div>
+        </div>
+    </main>
+
+    <!-- 🤖 المساعد الذكي المصغر -->
+    <div class="ai-widget" id="aiWidget" style="display: none;">
+        <button class="ai-toggle" onclick="toggleChat()">🤖 المساعد الأكاديمي</button>
+        <div class="chat-box" id="chatBox">
+            <div class="chat-header">المساعد الأكاديمي الذكي 🎓</div>
+            <div class="chat-messages" id="chatMessages">
+                <div class="bot-msg">أهلاً بك! أنا مساعدك في المواد وتدلك على القاعات والمباني بالجامعة. كيف أقدر أساعدك؟</div>
+            </div>
+            <div class="chat-input-area">
+                <input type="text" id="chatInput" placeholder="اسأل عن الشرح أو القاعات...">
+                <button onclick="sendAiMessage()">ارسل</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 🎓 شاشة الشرح التفاعلية (أول مرة فقط) -->
     <div class="guide-modal" id="guideModal">
         <div class="guide-content">
-            <!-- الخطوة 1 -->
             <div class="guide-step active" id="step1">
                 <div class="guide-icon">👋</div>
                 <h3>أهلاً بك في منصة "مُوثّق"!</h3>
-                <p style="font-size: 13px; color: #4a5568; margin-top: 10px;">
-                    منصتك الأكاديمية الموحدة لتنظيم دراستك، واجباتك، ومعدلك بكل سهولة واحترافية.
-                </p>
+                <p>منصتك الأكاديمية الموحدة لتنظيم دراستك، واجباتك، ومعدلك بكل سهولة واحترافية.</p>
                 <button class="guide-btn" onclick="nextStep(2)">التالي ➔</button>
             </div>
-
-            <!-- الخطوة 2 -->
             <div class="guide-step" id="step2">
                 <div class="guide-icon">⏱️</div>
                 <h3>نظام الواجبات والتنبيه التلقائي</h3>
-                <p style="font-size: 13px; color: #4a5568; margin-top: 10px;">
-                    أضف واجباتك ومواعيد تسليمها، والموقع بيرسل لك تنبيه تلقائي على إيميلك قبل النهاية بـ 24 ساعة!
-                </p>
+                <p>أضف واجباتك ومواعيد تسليمها، والموقع بيرسل لك تنبيه تلقائي على إيميلك قبل النهاية بـ 24 ساعة!</p>
                 <button class="guide-btn" onclick="nextStep(3)">التالي ➔</button>
             </div>
-
-            <!-- الخطوة 3 -->
             <div class="guide-step" id="step3">
                 <div class="guide-icon">🤖</div>
                 <h3>المساعد الأكاديمي الذكي</h3>
-                <p style="font-size: 13px; color: #4a5568; margin-top: 10px;">
-                    عندك سؤال أو ما فهمت نقطة؟ المساعد الذكي يشرح لك المواد ويدلك على أماكن القاعات والمباني بالجامعة!
-                </p>
+                <p>عندك سؤال أو ما فهمت نقطة؟ المساعد الذكي يشرح لك المواد ويدلك على أماكن القاعات والمباني بالجامعة!</p>
                 <button class="guide-btn" onclick="finishTour()">بدء الاستخدام 🚀</button>
             </div>
         </div>
     </div>
 
-    <script>
-        // التبديل بين شاشتي الدخول والتسجيل
-        function showRegister() {
-            document.getElementById('loginSection').style.display = 'none';
-            document.getElementById('registerSection').style.display = 'block';
-        }
-
-        // محاكاة إرسال الرمز
-        function sendOTP() {
-            alert("تم إرسال رمز التحقق التجريبي (1234) إلى بريدك الإلكتروني!");
-        }
-
-        // تسجيل حساب جديد
-        function registerUser() {
-            const name = document.getElementById('regName').value;
-            const pass = document.getElementById('regPass').value;
-            const otp = document.getElementById('otpCode').value;
-
-            if(!name || !pass || otp !== "1234") {
-                alert("يرجى تعبئة كافة البيانات وإدخال رمز التحقق الصحيح (1234)");
-                return;
-            }
-
-            // حفظ البيانات محلياً
-            localStorage.setItem('userPass', pass);
-            localStorage.setItem('isFirstTime', 'true'); // تعليم الحساب بأنه لأول مرة
-            alert("تم إنشاء الحساب بنجاح!");
-            
-            // تحويل لشاشة الدخول
-            location.reload();
-        }
-
-        // تسجيل الدخول السريع (نمط البنوك)
-        function loginUser() {
-            const passInput = document.getElementById('loginPass').value;
-            const savedPass = localStorage.getItem('userPass');
-
-            if(passInput === savedPass || passInput === "123456") { // 123456 كلمة سر افتراضية للتجربة
-                // فحص إذا كان يدخل لأول مرة لإظهار الجولة الشرح
-                if(localStorage.getItem('isFirstTime') !== 'false') {
-                    document.getElementById('guideModal').style.display = 'flex';
-                } else {
-                    alert("تم الدخول بنجاح! جاري تحويلك للوحة التحكم الرئيسية...");
-                }
-            } else {
-                alert("كلمة المرور غير صحيحة!");
-            }
-        }
-
-        // التنقل بين خطوات الجولة التعريفية
-        function nextStep(stepNum) {
-            document.querySelectorAll('.guide-step').forEach(step => step.classList.remove('active'));
-            document.getElementById('step' + stepNum).classList.add('active');
-        }
-
-        // إنهاء الجولة الشارحة
-        function finishTour() {
-            localStorage.setItem('isFirstTime', 'false'); // إلغاء الشرح للمرات القادمة
-            document.getElementById('guideModal').style.display = 'none';
-            alert("أهلاً بك في لوحة التحكم الرئيسية لمنصة مُوثّق!");
-        }
-    </script>
+    <script src="script.js"></script>
 </body>
-  </html>
-  
+                    </html>
+    
