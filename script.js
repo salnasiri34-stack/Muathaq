@@ -1,6 +1,6 @@
 let generatedOTP = "";
 
-// 🔔 طلب إذن الإشعارات فور فتح الموقع (يظهر زر السماح تلقائياً)
+// 🔔 طلب إذن الإشعارات فور فتح الموقع
 window.onload = function() {
     const savedPass = localStorage.getItem('userPass');
     const userName = localStorage.getItem('userName');
@@ -13,7 +13,7 @@ window.onload = function() {
         showRegister();
     }
 
-    // تفعيل نافذة "سماح" بالإشعارات
+    // طلب إذن الإشعارات من المتصفح مباشرة
     if ("Notification" in window && Notification.permission === "default") {
         Notification.requestPermission();
     }
@@ -100,13 +100,13 @@ function finishTour() {
     document.getElementById('guideModal').style.display = 'none';
 }
 
-// 📌 إضافة واجب وتعيين وقت التذكير التلقائي
+// 📌 إضافة واجب وتعيين التنبيه والتحذير قبل الانتهاء
 function addTask() {
     const name = document.getElementById('taskName').value;
-    const dateInput = document.getElementById('taskDueDate').value; // يأخذ الوقت والتاريخ
+    const dateInput = document.getElementById('taskDueDate').value;
 
     if(!name || !dateInput) {
-        alert("يرجى إدخال اسم الواجب وتحديد وقت وتسليم التكليف!");
+        alert("يرجى إدخال اسم الواجب وتحديد وقت التسليم!");
         return;
     }
 
@@ -117,33 +117,43 @@ function addTask() {
     taskDiv.innerHTML = `<strong>📌 ${name}</strong><br><small>⏰ موعد التسليم: ${dateInput}</small>`;
     taskList.appendChild(taskDiv);
 
-    // جدولة إرسال التنبيه التلقائي
-    scheduleTaskReminder(name, dateInput);
+    // جدولة التحذير قبل الموعد
+    scheduleWarningBeforeDue(name, dateInput);
 
-    alert(`تم حفظ الواجب "${name}" وسيقوم الموقع بتذكيرك بإشعار قبل الموعد! ⏳`);
+    alert(`تم حفظ الواجب "${name}" وسيصلك تحذير وتذكير قبل انتهاء الموعد! ⏳`);
     document.getElementById('taskName').value = '';
     document.getElementById('taskDueDate').value = '';
 }
 
-// ⏰ دالة حاسبة الوقت وإرسال الإشعار للتذكير
-function scheduleTaskReminder(taskName, dueDateString) {
+// 🚨 دالة إرسال التحذير قبل الانتهاء بـ 15 دقيقة
+function scheduleWarningBeforeDue(taskName, dueDateString) {
     const dueTime = new Date(dueDateString).getTime();
     const now = new Date().getTime();
-    const timeDifference = dueTime - now;
+    
+    // وقت التنبيه (قبل موعد التسليم بـ 15 دقيقة)
+    const minutesBefore = 15; 
+    const warningTime = dueTime - (minutesBefore * 60 * 1000);
+    const timeUntilWarning = warningTime - now;
 
-    if (timeDifference > 0) {
-        // نضبط التنبيه ليصدر عند الموعد المحدد بالضبط (أو قبل الموعد)
+    if (timeUntilWarning > 0) {
         setTimeout(() => {
-            // إرسال إشعار للنظام والجوال
+            // إرسال إشعار للنظام إذا كان المشتخدم ضاغط "سماح"
             if ("Notification" in window && Notification.permission === "granted") {
-                new Notification("⏰ تذكير بموعد الواجب!", {
-                    body: `تذكير: اقترب موعد تسليم الواجب (${taskName})! يرجى تسليمه الآن لتجنب التأخير.`,
+                new Notification("⚠️ تحذير: اقترب موعد انتهاء الواجب!", {
+                    body: `باقي 15 دقيقة فقط على موعد تسليم واجب (${taskName})!`,
                     icon: "https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
                 });
-            } else {
-                alert(`⏰ [تذكير بالواجب]\n\nاقترب موعد تسليم الواجب: (${taskName})!\nيرجى التسليم الآن.`);
             }
-        }, timeDifference);
+            
+            // تنبيه مباشر على الشاشة
+            alert(`⚠️ [تحذير عاجل]\n\nباقي 15 دقيقة فقط على نهاية موعد واجب:\n📌 "${taskName}"\n\nيرجى تسليمه الآن!`);
+        }, timeUntilWarning);
+    } else if (dueTime > now) {
+        // إذا كان باقي على الموعد أقل من 15 دقيقة، ينبهك وقت الموعد بالضبط
+        const exactTimeLeft = dueTime - now;
+        setTimeout(() => {
+            alert(`⚠️ [تحذير] انتهى وقت تسليم واجب: "${taskName}"!`);
+        }, exactTimeLeft);
     }
 }
 
