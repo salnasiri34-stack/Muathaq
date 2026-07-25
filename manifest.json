@@ -1,0 +1,16 @@
+{
+  "short_name": "مُوثّق",
+  "name": "منصة مُوثّق الأكاديمية",
+  "icons": [
+    {
+      "src": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0d/Emblem_of_Saudi_Arabia.svg/512px-Emblem_of_Saudi_Arabia.svg.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": "./index.html",
+  "background_color": "#004b23",
+  "theme_color": "#004b23",
+  "display": "standalone",
+  "orientation": "portrait"
+}
