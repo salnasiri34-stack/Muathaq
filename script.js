@@ -1,4 +1,10 @@
-// فحص حالة الدخول عند فتح الصفحة
+// تهيئة مكتبة إرسال الإيميلات بالمفتاح العام
+(function() {
+    emailjs.init("fMI8FQkqrjD2n7kFf");
+})();
+
+let generatedOTP = "";
+
 window.onload = function() {
     const savedPass = localStorage.getItem('userPass');
     const userName = localStorage.getItem('userName');
@@ -7,7 +13,6 @@ window.onload = function() {
         document.getElementById('userNameDisplay').innerText = userName;
     }
 
-    // إذا كان الحساب غير مسجل إطلاقاً، تحويل لشاشة التسجيل
     if(!savedPass) {
         showRegister();
     }
@@ -18,8 +23,41 @@ function showRegister() {
     document.getElementById('registerSection').style.display = 'block';
 }
 
-function sendOTP() {
-    alert("تم إرسال رمز التحقق التجريبي (1234) إلى بريدك الإلكتروني!");
+// 📧 إرسال إيميل حقيقي لصندوق الوارد عبر EmailJS
+function sendRealOTP() {
+    const email = document.getElementById('regEmail').value;
+    const name = document.getElementById('regName').value;
+    const btn = document.getElementById('sendOtpBtn');
+
+    if(!email || !name) {
+        alert("يرجى كتابة الاسم والبريد الإلكتروني أولاً!");
+        return;
+    }
+
+    // توليد رمز تحقق عشوائي من 6 أرقام
+    generatedOTP = Math.floor(100000 + Math.random() * 900000).toString();
+    
+    btn.innerText = "جاري الإرسال...";
+    btn.disabled = true;
+
+    // البارامترات الموجهة لقالب EmailJS الخاص بك
+    const templateParams = {
+        email: email,
+        passcode: generatedOTP,
+        time: "15 دقيقة"
+    };
+
+    // إرسال الإيميل الحقيقي عبر المفاتيح المعتمدة
+    emailjs.send('service_45enrga', 'template_gopbyly', templateParams)
+        .then(function(response) {
+            alert("تم إرسال رمز التحقق بنجاح إلى إيميلك: " + email);
+            btn.innerText = "تم الإرسال ✉️";
+        }, function(error) {
+            console.log("EmailJS Error:", error);
+            alert("حدث خطأ أثناء الإرسال، يرجى التثبت من صحة البريد الإلكتروني.");
+            btn.innerText = "إعادة إرسال";
+            btn.disabled = false;
+        });
 }
 
 function registerUser() {
@@ -27,15 +65,20 @@ function registerUser() {
     const pass = document.getElementById('regPass').value;
     const otp = document.getElementById('otpCode').value;
 
-    if(!name || !pass || otp !== "1234") {
-        alert("يرجى تعبئة كافة البيانات وإدخال رمز التحقق الصحيح (1234)");
+    if(!name || !pass) {
+        alert("يرجى تعبئة جميع البيانات!");
+        return;
+    }
+
+    if(otp !== generatedOTP) {
+        alert("رمز التحقق المدخل غير صحيح!");
         return;
     }
 
     localStorage.setItem('userName', name);
     localStorage.setItem('userPass', pass);
     localStorage.setItem('isFirstTime', 'true');
-    alert("تم إنشاء الحساب بنجاح!");
+    alert("تم إنشاء الحساب وتفعيله بنجاح!");
     location.reload();
 }
 
@@ -48,7 +91,6 @@ function loginUser() {
         document.getElementById('mainDashboard').style.display = 'block';
         document.getElementById('aiWidget').style.display = 'block';
 
-        // إظهار جولة الشرح لأول مرة فقط
         if(localStorage.getItem('isFirstTime') !== 'false') {
             document.getElementById('guideModal').style.display = 'flex';
         }
@@ -61,7 +103,6 @@ function logout() {
     location.reload();
 }
 
-// أزرار الجولة الشارحة
 function nextStep(stepNum) {
     document.querySelectorAll('.guide-step').forEach(step => step.classList.remove('active'));
     document.getElementById('step' + stepNum).classList.add('active');
@@ -72,32 +113,30 @@ function finishTour() {
     document.getElementById('guideModal').style.display = 'none';
 }
 
-// 1. إضافة واجب
 function addTask() {
     const name = document.getElementById('taskName').value;
     const date = document.getElementById('taskDueDate').value;
 
     if(!name || !date) {
-        alert("يرجى إدخال البيانات كاملة");
+        alert("يرجى إدخال اسم التكليف وتاريخ التسليم");
         return;
     }
 
     const taskList = document.getElementById('taskList');
     const taskDiv = document.createElement('div');
     taskDiv.className = 'task-item';
-    taskDiv.innerHTML = `<strong>${name}</strong><br>موعد التسليم: ${date}`;
+    taskDiv.innerHTML = `<strong>${name}</strong><br>التسليم: ${date}`;
     taskList.appendChild(taskDiv);
 
-    alert("تم إضافة الواجب بنجاح! وسيطبق عليه التنبيه التلقائي قبل موعد التسليم.");
+    alert("تم تفعيل التنبيه التلقائي للمهمة!");
 }
 
-// 2. حاسبة المعدل
 function calculateGPA() {
     const current = parseFloat(document.getElementById('currentGpa').value);
     const target = parseFloat(document.getElementById('targetGpa').value);
 
     if(!current || !target) {
-        alert("يرجى إدخال المعدل الحالي والمستهدف");
+        alert("يرجى أدخال المعدل الحالي والمستهدف");
         return;
     }
 
@@ -105,13 +144,12 @@ function calculateGPA() {
     const resultBox = document.getElementById('gpaResult');
 
     if(diff <= 0) {
-        resultBox.innerHTML = "أنت حالياً في المستوى المطلوب أو أعلى! حافظ على أدائك. 🎉";
+        resultBox.innerHTML = "أنت في المستوى المطلوب أو أعلى! ممتاز جداً. 🎉";
     } else {
-        resultBox.innerHTML = `تحتاج لرفع معدلك بمقدار (+${diff.toFixed(2)}). يوصى بالحصول على A في المواد القادمة. 🚀`;
+        resultBox.innerHTML = `مطلوب تحسين معدلك بمقدار (+${diff.toFixed(2)}). 🚀`;
     }
 }
 
-// 3. حفظ الملاحظات
 function saveNote() {
     const content = document.getElementById('noteContent').value;
     if(!content) return;
@@ -125,20 +163,18 @@ function saveNote() {
     document.getElementById('noteContent').value = '';
 }
 
-// 4. طباعة الغلاف
 function generateCover() {
     const docDoctor = document.getElementById('docDoctor').value;
     const docSubject = document.getElementById('docSubject').value;
 
     if(!docDoctor || !docSubject) {
-        alert("يرجى تعبئة اسم المادة والدكتور");
+        alert("يرجى إكمال الحقول المطلوب طباعتها");
         return;
     }
 
     window.print();
 }
 
-// 🤖 المساعد الذكي
 function toggleChat() {
     const box = document.getElementById('chatBox');
     box.style.display = box.style.display === 'flex' ? 'none' : 'flex';
@@ -151,7 +187,6 @@ function sendAiMessage() {
 
     const chatMessages = document.getElementById('chatMessages');
 
-    // رسالة المستخدم
     const userDiv = document.createElement('div');
     userDiv.className = 'user-msg';
     userDiv.innerText = text;
@@ -159,20 +194,19 @@ function sendAiMessage() {
 
     input.value = '';
 
-    // رد المساعد الآلي التفاعلي
     setTimeout(() => {
         const botDiv = document.createElement('div');
         botDiv.className = 'bot-msg';
         
-        if(text.includes("مكان") || text.includes("ين") || text.includes("قاعة")) {
-            botDiv.innerText = "أماكن القاعات والمباني تجدها عادة في المبنى الرئيسي للدور الأول أو عبر الخريطة الأكاديمية لجامعتك.";
-        } else if(text.includes("شرح") || text.includes("سؤال")) {
-            botDiv.innerText = "يسعدني شرح هذا المفهوم لك! باختصار، اعتمد دائماً على تقسيم السؤال إلى خطوات منطقية بسيطة.";
+        if(text.includes("مكان") || text.includes("قاعة") || text.includes("مبنى")) {
+            botDiv.innerText = "يمكنك العثور على القاعات عبر الخريطة الأكاديمية أو مراجعة اللوحات الإرشادية بالمبنى الرئيسي.";
+        } else if(text.includes("شرح") || text.includes("مادة")) {
+            botDiv.innerText = "يسعدني مساعدتك! قم بتقسيم الموضوع لسطور رئيسية لسهولة الاستيعاب.";
         } else {
-            botDiv.innerText = "تم استلام سؤالك الأكاديمي، المساعد يعمل على تلخيصه وإعطائك أفضل إجابة!";
+            botDiv.innerText = "تم استلام استفسارك، جاري تجهيز الرد الأكاديمي المناسب لك.";
         }
 
         chatMessages.appendChild(botDiv);
         chatMessages.scrollTop = chatMessages.scrollHeight;
     }, 600);
-      }
+}
