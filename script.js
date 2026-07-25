@@ -40,10 +40,14 @@ function sendRealOTP() {
     btn.innerText = "جاري الإرسال...";
     btn.disabled = true;
 
-    // البارامترات الموجهة لقالب EmailJS الخاص بك
+    // إرسال البيانات بأسماء المتغيرات الشاملة لضمان التوافق مع قالب EmailJS
     const templateParams = {
+        to_name: name,
+        to_email: email,
         email: email,
+        reply_to: email,
         passcode: generatedOTP,
+        otp: generatedOTP,
         time: "15 دقيقة"
     };
 
@@ -53,8 +57,8 @@ function sendRealOTP() {
             alert("تم إرسال رمز التحقق بنجاح إلى إيميلك: " + email);
             btn.innerText = "تم الإرسال ✉️";
         }, function(error) {
-            console.log("EmailJS Error:", error);
-            alert("حدث خطأ أثناء الإرسال، يرجى التثبت من صحة البريد الإلكتروني.");
+            console.log("EmailJS Error details:", error);
+            alert("حدث خطأ أثناء الإرسال. تأكد من كتابة البريد بشكل صحيح أو افحص ربط Gmail في EmailJS.");
             btn.innerText = "إعادة إرسال";
             btn.disabled = false;
         });
