@@ -4,32 +4,40 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>منصة مُوثّق الأكاديمية</title>
+
+    <meta name="theme-color" content="#004b23">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="مُوثّق">
+    
+    <link rel="apple-touch-icon" href="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0d/Emblem_of_Saudi_Arabia.svg/512px-Emblem_of_Saudi_Arabia.svg.png">
+    <link rel="icon" type="image/png" href="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0d/Emblem_of_Saudi_Arabia.svg/512px-Emblem_of_Saudi_Arabia.svg.png">
+    <link rel="manifest" href="manifest.json">
+
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 </head>
 <body>
 
-    <!-- 👑 الهيدر الرسمي -->
     <header>
         <div class="header-brand">
             <img src="https://flagcdn.com/w40/sa.png" class="flag-icon" alt="علم السعودية">
             <div class="header-info">
-                <strong>منصة مُوثّق الأكاديمية</strong><br>
-                <span>تدشين 2026م | رؤية المملكة 2030 🇸🇦</span>
+                <strong>منصة مُوثّق الأكاديمية العامة</strong><br>
+                <span>البوابة الطلابية الموحدة | رؤية المملكة 2030 🇸🇦</span>
             </div>
         </div>
-        <div class="developer-tag">
-            Programmed by: SULAIMAN ALNASIRI
+        <div class="system-status">
+            🟢 النظام يعمل بكفاءة
         </div>
     </header>
 
-    <!-- 🔒 شاشة تسجيل الدخول / إنشاء الحساب -->
     <div class="auth-container" id="authBox">
-        <!-- تسجيل الدخول بنمط البنوك -->
         <div id="loginSection">
             <div class="auth-header">
-                <h2>مرحباً بك مجدداً 🏛️</h2>
-                <p>أدخل كلمة المرور الخاصة بحسابك للدخول السريع</p>
+                <h2>تسجيل الدخول للنظام 🏛️</h2>
+                <p>أدخل كلمة المرور الخاصة بحسابك الأكاديمي للدخول السريع</p>
             </div>
             <div class="form-group">
                 <label>كلمة المرور الحماية</label>
@@ -41,15 +49,14 @@
             </p>
         </div>
 
-        <!-- إنشاء حساب جديد -->
         <div id="registerSection" style="display: none;">
             <div class="auth-header">
-                <h2>إنشاء حساب أكاديمي</h2>
-                <p>سجل بياناتك للتفعيل لأول مرة</p>
+                <h2>إنشاء حساب مستخدم جديد</h2>
+                <p>سجل بياناتك للتفعيل وإرسال رمز التحقق للإيميل</p>
             </div>
             <div class="form-group">
-                <label>الاسم الثلاثي</label>
-                <input type="text" id="regName" placeholder="سليمان الناصري">
+                <label>الاسم الكامل</label>
+                <input type="text" id="regName" placeholder="أدخل اسمك الثلاثي">
             </div>
             <div class="form-group">
                 <label>البريد الإلكتروني</label>
@@ -58,106 +65,98 @@
             <div class="form-group">
                 <label>رمز التحقق (OTP)</label>
                 <div style="display: flex; gap: 5px;">
-                    <input type="text" id="otpCode" placeholder="رمز التحقق">
-                    <button type="button" class="btn-otp" onclick="sendOTP()">إرسال الرمز</button>
+                    <input type="text" id="otpCode" placeholder="رمز التحقق من 6 أرقام">
+                    <button type="button" class="btn-otp" id="sendOtpBtn" onclick="sendRealOTP()">إرسال للإيميل</button>
                 </div>
             </div>
             <div class="form-group">
-                <label>تعيين كلمة المرور</label>
+                <label>تعيين كلمة المرور للدخول المستقبلي</label>
                 <input type="password" id="regPass" placeholder="••••••••">
             </div>
             <button class="btn-submit" onclick="registerUser()">تأكيد وإنشاء الحساب</button>
         </div>
     </div>
 
-    <!-- 🏛️ لوحة التحكم الرئيسية (تظهر بعد الدخول) -->
     <main class="main-dashboard" id="mainDashboard" style="display: none;">
         <div class="welcome-bar">
-            <h3>أهلاً بك، <span id="userNameDisplay">الطالب</span> 👋</h3>
+            <h3>مرحباً بك في لوحة الخدمات، <span id="userNameDisplay">المستخدم</span> 👋</h3>
             <button class="btn-logout" onclick="logout()">تسجيل الخروج</button>
         </div>
 
-        <!-- الأقسام الرئيسية -->
         <div class="grid-container">
-            <!-- 1. إدارة الواجبات -->
             <div class="card">
-                <h3>⏱️ إضافة واجب جديد</h3>
+                <h3>⏱️ إضافة واجب وتكليف جديد</h3>
                 <div class="form-group">
-                    <input type="text" id="taskName" placeholder="اسم المادة/التكليف">
+                    <input type="text" id="taskName" placeholder="اسم التكليف / المادة">
                 </div>
                 <div class="form-group">
-                    <label>تاريخ التسليم النهائي</label>
+                    <label>تاريخ ووقت التسليم النهائي</label>
                     <input type="datetime-local" id="taskDueDate">
                 </div>
                 <button class="btn-submit" onclick="addTask()">حفظ ونشر التنبيه</button>
                 <div class="task-list" id="taskList"></div>
             </div>
 
-            <!-- 2. حاسبة المعدل -->
             <div class="card">
                 <h3>🎓 حاسبة المعدل التراكمي (GPA)</h3>
                 <div class="form-group">
-                    <input type="number" id="currentGpa" step="0.01" placeholder="معدلك الحالي (مثال: 4.2)">
+                    <input type="number" id="currentGpa" step="0.01" placeholder="المعدل الحالي (مثال: 4.15)">
                 </div>
                 <div class="form-group">
-                    <input type="number" id="targetGpa" step="0.01" placeholder="المعدل المستهدف للتخرج">
+                    <input type="number" id="targetGpa" step="0.01" placeholder="المعدل المستهدف">
                 </div>
                 <button class="btn-submit" onclick="calculateGPA()">تحليل الهدف الأكاديمي</button>
                 <div id="gpaResult" class="result-box"></div>
             </div>
 
-            <!-- 3. الملاحظات والملخصات -->
             <div class="card">
-                <h3>📝 دفتر الملاحظات السريعة</h3>
-                <textarea id="noteContent" rows="4" placeholder="اكتب ملاحظات المحاضرة هنا..."></textarea>
+                <h3>📝 دفتر الملاحظات والملخصات</h3>
+                <textarea id="noteContent" rows="4" placeholder="اكتب ملاحظاتك الأكاديمية هنا..."></textarea>
                 <button class="btn-submit" style="margin-top: 10px;" onclick="saveNote()">حفظ الملاحظة</button>
                 <div id="savedNotes" class="notes-container"></div>
             </div>
 
-            <!-- 4. مولّد غلاف الأبحاث -->
             <div class="card">
-                <h3>📄 مولّد غلاف الأبحاث الرسمي</h3>
-                <input type="text" id="docDoctor" placeholder="اسم الدكتور" class="input-space">
-                <input type="text" id="docSubject" placeholder="اسم المادة" class="input-space">
+                <h3>📄 مولّد غلاف الأبحاث والتكاليف</h3>
+                <input type="text" id="docDoctor" placeholder="اسم المحاضر / الدكتور" class="input-space">
+                <input type="text" id="docSubject" placeholder="اسم المقرر" class="input-space">
                 <button class="btn-submit" onclick="generateCover()">طباعة / تحميل الغلاف</button>
             </div>
         </div>
     </main>
 
-    <!-- 🤖 المساعد الذكي المصغر -->
     <div class="ai-widget" id="aiWidget" style="display: none;">
         <button class="ai-toggle" onclick="toggleChat()">🤖 المساعد الأكاديمي</button>
         <div class="chat-box" id="chatBox">
             <div class="chat-header">المساعد الأكاديمي الذكي 🎓</div>
             <div class="chat-messages" id="chatMessages">
-                <div class="bot-msg">أهلاً بك! أنا مساعدك في المواد وتدلك على القاعات والمباني بالجامعة. كيف أقدر أساعدك؟</div>
+                <div class="bot-msg">أهلاً بك! أنا مساعدك الذكي للإجابة عن الاستفسارات الأكاديمية وتوضيح القاعات والمواد. كيف يمكنني مساعدتك؟</div>
             </div>
             <div class="chat-input-area">
-                <input type="text" id="chatInput" placeholder="اسأل عن الشرح أو القاعات...">
-                <button onclick="sendAiMessage()">ارسل</button>
+                <input type="text" id="chatInput" placeholder="اكتب استفسارك هنا...">
+                <button onclick="sendAiMessage()">إرسال</button>
             </div>
         </div>
     </div>
 
-    <!-- 🎓 شاشة الشرح التفاعلية (أول مرة فقط) -->
     <div class="guide-modal" id="guideModal">
         <div class="guide-content">
             <div class="guide-step active" id="step1">
                 <div class="guide-icon">👋</div>
-                <h3>أهلاً بك في منصة "مُوثّق"!</h3>
-                <p>منصتك الأكاديمية الموحدة لتنظيم دراستك، واجباتك، ومعدلك بكل سهولة واحترافية.</p>
+                <h3>أهلاً بك في منصة "مُوثّق" الأكاديمية!</h3>
+                <p>البوابة الأكاديمية الموحدة لتنظيم جداولك، مهامك، وحساب معدلك بكل سهولة واحترافية.</p>
                 <button class="guide-btn" onclick="nextStep(2)">التالي ➔</button>
             </div>
             <div class="guide-step" id="step2">
                 <div class="guide-icon">⏱️</div>
-                <h3>نظام الواجبات والتنبيه التلقائي</h3>
-                <p>أضف واجباتك ومواعيد تسليمها، والموقع بيرسل لك تنبيه تلقائي على إيميلك قبل النهاية بـ 24 ساعة!</p>
+                <h3>نظام المهام والتنبيه الذكي</h3>
+                <p>أضف واجباتك وتكاليفك ومواعيد تسليمها لتصلك تنبيهات تلقائية قبل الموعد!</p>
                 <button class="guide-btn" onclick="nextStep(3)">التالي ➔</button>
             </div>
             <div class="guide-step" id="step3">
                 <div class="guide-icon">🤖</div>
-                <h3>المساعد الأكاديمي الذكي</h3>
-                <p>عندك سؤال أو ما فهمت نقطة؟ المساعد الذكي يشرح لك المواد ويدلك على أماكن القاعات والمباني بالجامعة!</p>
+                <h3>المساعد الأكاديمي التفاعلي</h3>
+                <p>استعن بالمساعد الذكي للبحث عن أماكن القاعات والمباني أو الاستفسار عن الشرح.</p>
                 <button class="guide-btn" onclick="finishTour()">بدء الاستخدام 🚀</button>
             </div>
         </div>
@@ -165,5 +164,5 @@
 
     <script src="script.js"></script>
 </body>
-                    </html>
+    </html>
     
