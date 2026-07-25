@@ -1,5 +1,6 @@
 let generatedOTP = "";
 
+// 🔔 طلب إذن الإشعارات فور فتح الموقع (يظهر زر السماح تلقائياً)
 window.onload = function() {
     const savedPass = localStorage.getItem('userPass');
     const userName = localStorage.getItem('userName');
@@ -12,8 +13,8 @@ window.onload = function() {
         showRegister();
     }
 
-    // طلب إذن الإشعارات فور فتح الصفحة لضمان وصول التنبيه للجوال
-    if ("Notification" in window && Notification.permission !== "granted") {
+    // تفعيل نافذة "سماح" بالإشعارات
+    if ("Notification" in window && Notification.permission === "default") {
         Notification.requestPermission();
     }
 };
@@ -99,13 +100,13 @@ function finishTour() {
     document.getElementById('guideModal').style.display = 'none';
 }
 
-// 📌 إضافة التكليف وتفعيل التذكير الفوري
+// 📌 إضافة واجب وتعيين وقت التذكير التلقائي
 function addTask() {
     const name = document.getElementById('taskName').value;
-    const date = document.getElementById('taskDueDate').value;
+    const dateInput = document.getElementById('taskDueDate').value; // يأخذ الوقت والتاريخ
 
-    if(!name || !date) {
-        alert("يرجى إدخال اسم التكليف وتاريخ التسليم!");
+    if(!name || !dateInput) {
+        alert("يرجى إدخال اسم الواجب وتحديد وقت وتسليم التكليف!");
         return;
     }
 
@@ -113,38 +114,37 @@ function addTask() {
     const taskDiv = document.createElement('div');
     taskDiv.className = 'task-item';
     taskDiv.style.cssText = "background:#f1f5f9; padding:10px; margin-top:8px; border-radius:8px; border-right:4px solid #10b981;";
-    taskDiv.innerHTML = `<strong>📌 ${name}</strong><br><small>📅 الموعد: ${date}</small>`;
+    taskDiv.innerHTML = `<strong>📌 ${name}</strong><br><small>⏰ موعد التسليم: ${dateInput}</small>`;
     taskList.appendChild(taskDiv);
 
-    // تفعيل التنبيه المباشر للتكليف
-    scheduleTaskReminder(name, date);
+    // جدولة إرسال التنبيه التلقائي
+    scheduleTaskReminder(name, dateInput);
 
-    alert(`تم حفظ الواجب "${name}" بنجاح! سينبهك النظام فوراً بمجرد الاقتراب من موعد التسليم. ⏳`);
+    alert(`تم حفظ الواجب "${name}" وسيقوم الموقع بتذكيرك بإشعار قبل الموعد! ⏳`);
     document.getElementById('taskName').value = '';
     document.getElementById('taskDueDate').value = '';
 }
 
-// 🚨 دالة إرسال التنبيه الحتمي للطالب
+// ⏰ دالة حاسبة الوقت وإرسال الإشعار للتذكير
 function scheduleTaskReminder(taskName, dueDateString) {
     const dueTime = new Date(dueDateString).getTime();
     const now = new Date().getTime();
     const timeDifference = dueTime - now;
 
-    // حساب وقت التنبيه (ينبه بعد 5 ثوانٍ للتجربة الحية، أو عند الموعد المضبوط)
-    const delay = timeDifference > 0 ? Math.min(timeDifference, 5000) : 1000;
-
-    setTimeout(() => {
-        // 1. إرسال إشعار للنظام والجوال
-        if ("Notification" in window && Notification.permission === "granted") {
-            new Notification("🚨 تنبيه عاجل من منصة مُوثّق!", {
-                body: `تذكير هام: اقترب موعد تسليم التكليف/الواجب: (${taskName})! نرجو التسليم لتجنب خصم الدرجات.`,
-                icon: "https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
-            });
-        }
-        
-        // 2. إظهار رسالة تنبيه بارزة على الشاشة لضمان أن الطالب يرى التنبيه
-        alert(`🚨 [تنبيه عاجل - منصة مُوثّق]\n\nعزيزي الطالب، اقترب موعد تسليم الواجب:\n📌 "${taskName}"\n\nيرجى تسليمه الآن لمنع التأخير وخصم الدرجات!`);
-    }, delay);
+    if (timeDifference > 0) {
+        // نضبط التنبيه ليصدر عند الموعد المحدد بالضبط (أو قبل الموعد)
+        setTimeout(() => {
+            // إرسال إشعار للنظام والجوال
+            if ("Notification" in window && Notification.permission === "granted") {
+                new Notification("⏰ تذكير بموعد الواجب!", {
+                    body: `تذكير: اقترب موعد تسليم الواجب (${taskName})! يرجى تسليمه الآن لتجنب التأخير.`,
+                    icon: "https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
+                });
+            } else {
+                alert(`⏰ [تذكير بالواجب]\n\nاقترب موعد تسليم الواجب: (${taskName})!\nيرجى التسليم الآن.`);
+            }
+        }, timeDifference);
+    }
 }
 
 function calculateGPA() {
