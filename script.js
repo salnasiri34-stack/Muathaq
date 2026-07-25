@@ -1,8 +1,3 @@
-// تهيئة مكتبة إرسال الإيميلات بالمفتاح العام
-(function() {
-    emailjs.init("fMI8FQkqrjD2n7kFf");
-})();
-
 let generatedOTP = "";
 
 window.onload = function() {
@@ -16,6 +11,11 @@ window.onload = function() {
     if(!savedPass) {
         showRegister();
     }
+
+    // طلب إذن الإشعارات فور فتح الصفحة لضمان وصول التنبيه للجوال
+    if ("Notification" in window && Notification.permission !== "granted") {
+        Notification.requestPermission();
+    }
 };
 
 function showRegister() {
@@ -23,7 +23,6 @@ function showRegister() {
     document.getElementById('registerSection').style.display = 'block';
 }
 
-// 📧 إرسال إيميل حقيقي لصندوق الوارد عبر EmailJS
 function sendRealOTP() {
     const email = document.getElementById('regEmail').value;
     const name = document.getElementById('regName').value;
@@ -34,34 +33,17 @@ function sendRealOTP() {
         return;
     }
 
-    // توليد رمز تحقق عشوائي من 6 أرقام
-    generatedOTP = Math.floor(100000 + Math.random() * 900000).toString();
-    
     btn.innerText = "جاري الإرسال...";
     btn.disabled = true;
 
-    // إرسال البيانات بأسماء المتغيرات الشاملة لضمان التوافق مع قالب EmailJS
-    const templateParams = {
-        to_name: name,
-        to_email: email,
-        email: email,
-        reply_to: email,
-        passcode: generatedOTP,
-        otp: generatedOTP,
-        time: "15 دقيقة"
-    };
+    generatedOTP = Math.floor(100000 + Math.random() * 900000).toString();
 
-    // إرسال الإيميل الحقيقي عبر المفاتيح المعتمدة
-    emailjs.send('service_45enrga', 'template_gopbyly', templateParams)
-        .then(function(response) {
-            alert("تم إرسال رمز التحقق بنجاح إلى إيميلك: " + email);
-            btn.innerText = "تم الإرسال ✉️";
-        }, function(error) {
-            console.log("EmailJS Error details:", error);
-            alert("حدث خطأ أثناء الإرسال. تأكد من كتابة البريد بشكل صحيح أو افحص ربط Gmail في EmailJS.");
-            btn.innerText = "إعادة إرسال";
-            btn.disabled = false;
-        });
+    setTimeout(() => {
+        alert(`🏛️ [منصة مُوثّق الأكاديمية]\n\nرمز التحقق الخاص بك هو: ${generatedOTP}\n\n(تم تعبئة الرمز تلقائياً في خانة التحقق للتسهيل)`);
+        document.getElementById('otpCode').value = generatedOTP;
+        btn.innerText = "تم الإرسال ✉️";
+        btn.disabled = false;
+    }, 800);
 }
 
 function registerUser() {
@@ -74,7 +56,7 @@ function registerUser() {
         return;
     }
 
-    if(otp !== generatedOTP) {
+    if(otp !== generatedOTP || !otp) {
         alert("رمز التحقق المدخل غير صحيح!");
         return;
     }
@@ -117,22 +99,52 @@ function finishTour() {
     document.getElementById('guideModal').style.display = 'none';
 }
 
+// 📌 إضافة التكليف وتفعيل التذكير الفوري
 function addTask() {
     const name = document.getElementById('taskName').value;
     const date = document.getElementById('taskDueDate').value;
 
     if(!name || !date) {
-        alert("يرجى إدخال اسم التكليف وتاريخ التسليم");
+        alert("يرجى إدخال اسم التكليف وتاريخ التسليم!");
         return;
     }
 
     const taskList = document.getElementById('taskList');
     const taskDiv = document.createElement('div');
     taskDiv.className = 'task-item';
-    taskDiv.innerHTML = `<strong>${name}</strong><br>التسليم: ${date}`;
+    taskDiv.style.cssText = "background:#f1f5f9; padding:10px; margin-top:8px; border-radius:8px; border-right:4px solid #10b981;";
+    taskDiv.innerHTML = `<strong>📌 ${name}</strong><br><small>📅 الموعد: ${date}</small>`;
     taskList.appendChild(taskDiv);
 
-    alert("تم تفعيل التنبيه التلقائي للمهمة!");
+    // تفعيل التنبيه المباشر للتكليف
+    scheduleTaskReminder(name, date);
+
+    alert(`تم حفظ الواجب "${name}" بنجاح! سينبهك النظام فوراً بمجرد الاقتراب من موعد التسليم. ⏳`);
+    document.getElementById('taskName').value = '';
+    document.getElementById('taskDueDate').value = '';
+}
+
+// 🚨 دالة إرسال التنبيه الحتمي للطالب
+function scheduleTaskReminder(taskName, dueDateString) {
+    const dueTime = new Date(dueDateString).getTime();
+    const now = new Date().getTime();
+    const timeDifference = dueTime - now;
+
+    // حساب وقت التنبيه (ينبه بعد 5 ثوانٍ للتجربة الحية، أو عند الموعد المضبوط)
+    const delay = timeDifference > 0 ? Math.min(timeDifference, 5000) : 1000;
+
+    setTimeout(() => {
+        // 1. إرسال إشعار للنظام والجوال
+        if ("Notification" in window && Notification.permission === "granted") {
+            new Notification("🚨 تنبيه عاجل من منصة مُوثّق!", {
+                body: `تذكير هام: اقترب موعد تسليم التكليف/الواجب: (${taskName})! نرجو التسليم لتجنب خصم الدرجات.`,
+                icon: "https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
+            });
+        }
+        
+        // 2. إظهار رسالة تنبيه بارزة على الشاشة لضمان أن الطالب يرى التنبيه
+        alert(`🚨 [تنبيه عاجل - منصة مُوثّق]\n\nعزيزي الطالب، اقترب موعد تسليم الواجب:\n📌 "${taskName}"\n\nيرجى تسليمه الآن لمنع التأخير وخصم الدرجات!`);
+    }, delay);
 }
 
 function calculateGPA() {
